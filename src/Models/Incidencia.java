@@ -2,7 +2,7 @@ package Models;
 
 public class Incidencia implements java.io.Serializable {
 
-    private int idincidencia;
+    private String idincidencia;
     private Empleado empleadoByOrigen;
     private Empleado empleadoByDestino;
     private String fechahora;
@@ -12,7 +12,7 @@ public class Incidencia implements java.io.Serializable {
     public Incidencia() {
     }
 
-    public Incidencia(int idincidencia) {
+    public Incidencia(String idincidencia) {
         this.idincidencia = idincidencia;
     }
 
@@ -24,11 +24,11 @@ public class Incidencia implements java.io.Serializable {
         this.tipo = tipo;
     }
 
-    public int getIdincidencia() {
+    public String getIdincidencia() {
         return this.idincidencia;
     }
 
-    public void setIdincidencia(int idincidencia) {
+    public void setIdincidencia(String idincidencia) {
         this.idincidencia = idincidencia;
     }
 
