@@ -2,12 +2,16 @@ package Models;
 
 public class Historial implements java.io.Serializable {
 
-    private Integer idevento;
+    private String idevento;
     private Empleado empleado;
     private String tipo;
     private String fechahora;
 
     public Historial() {
+    }
+
+    public Historial(String idevento) {
+        this.idevento = idevento;
     }
 
     public Historial(Empleado empleado, String tipo, String fechahora) {
@@ -16,11 +20,11 @@ public class Historial implements java.io.Serializable {
         this.fechahora = fechahora;
     }
 
-    public Integer getIdevento() {
+    public String getIdevento() {
         return this.idevento;
     }
 
-    public void setIdevento(Integer idevento) {
+    public void setIdevento(String idevento) {
         this.idevento = idevento;
     }
 

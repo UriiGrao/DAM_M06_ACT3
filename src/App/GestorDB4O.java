@@ -12,6 +12,7 @@ import Utils.Colors;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +35,15 @@ public class GestorDB4O {
         db.close();
     }
 
+    public void generateTestEmpleados() {
+        Empleado empleado = new Empleado("admin", "1234");
+        Empleado empleado2 = new Empleado("test", "1234");
+        db.store(empleado);
+        db.store(empleado2);
+        Colors.printBlue("Se te han genearo dos usuarios de test con username: admin, test"
+                + "la pass para los dos es 1234");
+    }
+
     /* EMPLEADOS */
     public void addEmpleado(Empleado e) {
         db.store(e);
@@ -50,6 +60,15 @@ public class GestorDB4O {
             return (Empleado) result.next();
         }
         return null;
+    }
+
+    public ArrayList<String> getAllEmpleadosUsername() {
+        empleados = db.query(Empleado.class);
+        ArrayList<String> usernames = new ArrayList<>();
+        for (Empleado empleado : empleados) {
+            usernames.add(empleado.getNombreusuario());
+        }
+        return usernames;
     }
 
     public void deleteEmpleado(Empleado empleado) {
@@ -102,6 +121,14 @@ public class GestorDB4O {
     }
 
     /* HISTORIALES */
+    public Historial getHistorial(Historial historial) {
+        ObjectSet result = db.queryByExample(historial);
+        if (result.hasNext()) {
+            return (Historial) result.next();
+        }
+        return null;
+    }
+
     public void getAllHistoriales() {
         ObjectSet result = db.queryByExample(Historial.class);
         System.out.println(result.size());
@@ -111,5 +138,13 @@ public class GestorDB4O {
     public void addHistorial(Historial h) {
         db.store(h);
         Colors.printBlue("Historial generado");
+    }
+
+    public Historial getLastConnectEmpleado(Historial historial) {
+        ObjectSet result = db.queryByExample(historial);
+        if (result.hasNext()) {
+            return (Historial) result.next();
+        }
+        return null;
     }
 }

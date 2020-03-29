@@ -25,14 +25,16 @@ public class IncidenciasBDOR {
     private static final GestorDB4O gestor = new GestorDB4O();
 
     public static void main(String[] args) {
-        gestor.getAllEmpleados();
-        if (0 == empleados.size()) {
-            generateTestEmpleados();
-        }
+
         startIncidenciasEmpleados();
     }
 
     public static void startIncidenciasEmpleados() {
+        gestor.getAllEmpleados();
+        if (0 == empleados.size()) {
+            gestor.generateTestEmpleados();
+        }
+
         boolean exit = false;
         while (!exit) {
             switch (menu()) {
@@ -51,15 +53,6 @@ public class IncidenciasBDOR {
                     Colors.printRed(ERROR_MESSAGE);
             }
         }
-    }
-
-    private static void generateTestEmpleados() {
-        Empleado empleado = new Empleado("admin", "1234");
-        Empleado empleado2 = new Empleado("test", "1234");
-        gestor.addEmpleado(empleado);
-        gestor.addEmpleado(empleado2);
-        Colors.printBlue("Se te han genearo dos usuarios de test con username: admin, test"
-                + "la pass para los dos es 1234");
     }
 
     private static int menu() {
@@ -90,12 +83,7 @@ public class IncidenciasBDOR {
                         createIncidencia();
                         break;
                     case "d":
-                        table = "destino";
-                        showAllIncidenciasFrom(table);
-                        break;
-                    case "e":
-                        table = "origen";
-                        showAllIncidenciasFrom(table);
+                        showAllIncidenciasFrom();
                         break;
                     case "f":
                         salirInci = true;
@@ -115,8 +103,7 @@ public class IncidenciasBDOR {
         System.out.println("a. Mostrar 1 Incidencia");
         System.out.println("b. Mostrar Incidencias");
         System.out.println("c. Insertar Incidencia");
-        System.out.println("d. Mostrar Incidencia gestionadas por Empleado");
-        System.out.println("e. Mostrar Incidencia creadas por Empleado");
+        System.out.println("d. Mostrar Incidencia creadas por Empleado");
         System.out.println("f. Exit");
         return entrada.next();
     }
@@ -143,7 +130,7 @@ public class IncidenciasBDOR {
     }
 
     private static void createIncidencia() throws MiExcepcion {
-        String idIncidencia = EntradaDatos.pedirCadena("Id de la incidencia: ");
+        String idIncidencia = EntradaDatos.pedirCadena("Id de la incidencia (es unico): ");
         String fechahora = EntradaDatos.pedirCadena("Fecha de la incidencias: YY/MM/DD ");
         String detalle = EntradaDatos.pedirCadena("Detalles de la incidencia: ");
         String userOrigen = EntradaDatos.pedirCadena("Nombre Usuario del origen: ");
@@ -172,19 +159,14 @@ public class IncidenciasBDOR {
         gestor.addIncidencia(incidencia);
     }
 
-    private static void showAllIncidenciasFrom(String table) throws MiExcepcion {
+    private static void showAllIncidenciasFrom() throws MiExcepcion {
         String userName = EntradaDatos.pedirCadena("Nombre Usuario del buscado: ");
         Empleado empleado = new Empleado(userName);
         if (gestor.getEmpleado(empleado) == null) {
             throw new MiExcepcion("No hay empleado con ese nombre de usuario");
         }
         Incidencia incidencia = new Incidencia();
-
-        if (table.equalsIgnoreCase("destino")) {
-            incidencia.setEmpleadoByDestino(empleado);
-        } else {
-            incidencia.setEmpleadoByOrigen(empleado);
-        }
+        incidencia.setEmpleadoByOrigen(empleado);
         gestor.getAllIncidencias();
         incidencias.forEach((i) -> {
             System.out.println(i.toString());
@@ -238,7 +220,7 @@ public class IncidenciasBDOR {
     }
 
     private static void createEmpleado() throws MiExcepcion {
-        String userName = EntradaDatos.pedirCadena("Nombre Usuario: ");
+        String userName = EntradaDatos.pedirCadena("Nombre Usuario (es unico): ");
         String password = EntradaDatos.pedirCadena("Password: ");
         String completName = EntradaDatos.pedirCadena("Nombre completo: ");
         String phone = EntradaDatos.pedirCadena("Telefono:");
